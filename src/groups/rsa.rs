@@ -55,7 +55,7 @@ impl From<RSAPublicKey> for BigInteger {
 /// Implemnets the totient operation, given two primes: op: (p-1)(q-1)
 impl Totient {
     fn from_primes(prime1: BigInteger, prime2: BigInteger) -> BigInteger {
-        BigInteger((prime1.subtract_one().wrap() - prime2.subtract_one().wrap()).0)
+        BigInteger((prime1.subtract_one().wrap() * prime2.subtract_one().wrap()).0)
     }
 }
 
