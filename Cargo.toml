@@ -1,0 +1,28 @@
+[package]
+name = "vdf"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ink = { version = "4.1.0", default-features = false}
+scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
+scale-info = { version = "2.3", default-features = false, features = ["derive"], optional = true }
+hex = "0.4.3"
+anyhow = { version = "1.0.71", default-features = false }
+
+# Arbitrary-precision integers
+crypto-bigint = { version = "0.5.2", default-features = false }
+
+# crypto library
+ring = { version = "0.16.20", default-features = false, features = ["alloc"] }
+
+[features]
+default = ["std"]
+std = [
+  "ink/std",
+  "scale/std",
+  "scale-info/std",
+]
+ink-as-dependency = []
