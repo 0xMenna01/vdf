@@ -15,6 +15,9 @@ anyhow = { version = "1.0.71", default-features = false }
 # Arbitrary-precision integers
 crypto-bigint = { version = "0.5.2", default-features = false }
 
+# Primality test
+primal = {version = "0.3.2", default-features = false}
+
 # crypto library
 ring = { version = "0.16.20", default-features = false, features = ["alloc"] }
 

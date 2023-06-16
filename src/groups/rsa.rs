@@ -5,52 +5,46 @@
 // so data types must be easily stored.
 // ink custom data structures: https://use.ink/datastructures/custom-datastructure
 
-use crate::{Vec, VDFSetupSecret};
 use crate::{VDFPublicParam, VDFSecretParam};
+use crate::{VDFSetupSecret, Vec};
 use crypto_bigint::{Encoding, Wrapping, U2048};
 
-const KEY_LENGTH: usize = 256;
+pub const KEY_LENGTH: usize = 256;
 
 #[derive(Debug, Clone, Copy)]
-struct RSASecretKey([u8; KEY_LENGTH]);
+pub struct BytesWrapper<const LENGTH: usize>(pub [u8; LENGTH]);
 
-#[derive(Debug, Clone, Copy)]
-struct RSAPublicKey([u8; KEY_LENGTH]);
+pub type RSASecretKey = BytesWrapper<KEY_LENGTH>;
+pub type RSAPublicKey = BytesWrapper<KEY_LENGTH>;
 
 type Integer = U2048;
 
 #[derive(Debug, Clone, Copy)]
-struct BigInteger(Integer);
+pub struct BigInteger(Integer);
 struct Totient;
 
 impl BigInteger {
     /// Wraps the integer to perform arithmetic operations
-    fn wrap(&self) -> Wrapping<Integer> {
+    pub fn wrap(&self) -> Wrapping<Integer> {
         Wrapping(self.0)
     }
     /// Subtract 1 to the given integer
-    fn subtract_one(&self) -> Self {
+    pub fn subtract_one(&self) -> Self {
         BigInteger((self.wrap() - Wrapping(Integer::ONE)).0)
     }
     /// Performs the conversion of the integer to a big endian byte array
-    fn to_bytes(&self) -> [u8; KEY_LENGTH] {
+    pub fn to_bytes(&self) -> [u8; KEY_LENGTH] {
         self.0.to_be_bytes()
     }
 }
 
-/// Obtains the integer associated to a given RSA secret key
-impl From<RSASecretKey> for BigInteger {
-    fn from(secret_key: RSASecretKey) -> Self {
-        BigInteger(Integer::from_be_slice(secret_key.0.as_ref()))
+/// Obtains the integer associated to a given byte slice
+impl<const LENGTH: usize> From<BytesWrapper<LENGTH>> for BigInteger {
+    fn from(bytes: BytesWrapper<LENGTH>) -> Self {
+        BigInteger(Integer::from_be_slice(bytes.0.as_ref()))
     }
 }
 
-/// Obtains the integer associated to a given RSA public key
-impl From<RSAPublicKey> for BigInteger {
-    fn from(pubkey: RSAPublicKey) -> Self {
-        BigInteger(Integer::from_be_slice(pubkey.0.as_ref()))
-    }
-}
 
 /// Implemnets the totient operation, given two primes: op: (p-1)(q-1)
 impl Totient {
@@ -102,11 +96,10 @@ impl From<RSAPublicParam> for RSAPublicKey {
     }
 }
 
-// These secret parameters are used to perform a KDF to obtain unpredictable big integer values.
+// These secret parameter is used to perform a KDF to obtain unpredictable big integer values.
 // The first two values that pass the primality test are being assigned to the private parameters.
 pub struct RSASetupSecret {
-    secret_seed: Vec<u8>,
-    salt: Vec<u8>,
+    secret_key: Vec<u8>,
 }
 
 impl VDFSetupSecret for RSASetupSecret {}
