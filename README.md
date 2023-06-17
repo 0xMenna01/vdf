@@ -1,6 +1,6 @@
 # Verifiable Delay Function with Trapdoor (Rust Implementation)
 
-This repository hosts an ongoing Rust implementation of the Verifiable Delay Function (VDF) with a trapdoor, as introduced by Benjamin Wesolowski. The objective is to create a reliable and efficient VDF solution suitable for ink smart contracts. These smart contracts are part of parachains built on top of Substrate, a framework for building interoperable blockchains.
+This repository hosts an ongoing Rust implementation of the Verifiable Delay Function (VDF) with a trapdoor, as introduced by Benjamin Wesolowski. The objective is to implement a reliable and efficient VDF solution suitable for ink smart contracts. These smart contracts are part of parachains built on top of Substrate, a framework for building interoperable blockchains.
 
 ## Introduction
 
